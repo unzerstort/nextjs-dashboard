@@ -12,17 +12,16 @@ export const metadata: Metadata = {
 };
 
 export default async function Page(props: {
-  searchParams?: {
+  searchParams?: Promise<{
     query?: string;
     page?: string;
-  };
+  }>;
 }) {
   const searchParams = await props.searchParams;
   const query = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;
 
   const customers = await fetchFilteredCustomers(query);
-  const totalPages = await fetchCustomers(query);
 
   return (
     <div className="w-full">
@@ -31,9 +30,6 @@ export default async function Page(props: {
         <CustomersTable customers={customers} />
       </Suspense>
 
-      <div className="mt-5 flex w-full justify-center">
-        <Pagination totalPages={totalPages} />
-      </div>
     </div>
   );
 }
